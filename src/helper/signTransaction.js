@@ -1,6 +1,5 @@
 const axios = require('axios')
-// const bitcore = require('D:/Documents/Safle_network/safle-vault/bitcoin-wallet-controller/node_modules/bitcore-lib')
-const bitcore = require("D:/Documents/Safle_network/safle-vault/bitcoin-wallet-controller/node_modules/bitcore-explorers/node_modules/bitcore-lib")
+const bitcore = require("bitcore-lib")
 const { SATOSHI } = require("../config/index")
 
 
