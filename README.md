@@ -1,1 +1,1 @@
-# bitcoin-wallet-conytroller
+# bitcoin-wallet-controller
