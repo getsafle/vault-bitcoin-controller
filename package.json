@@ -1,0 +1,47 @@
+{
+  "name": "@getsafle/bitcoin-wallet-controller",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": ">= 10"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint --fix . --ext .js",
+    "test": "mocha --timeout 15000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getsafle/bitcoin-wallet-controller.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "keyring"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/getsafle/bitcoin-wallet-controller/issues"
+  },
+  "homepage": "https://github.com/getsafle/bitcoin-wallet-controller#readme",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "bip39": "^2.2.0",
+    "bitcoinjs-lib": "^5.2.0",
+    "bitcoinjs-message": "^2.2.0",
+    "bitcore-explorers": "^1.0.1",
+    "bitcore-lib": "^8.25.10",
+    "crypto-js": "^4.0.0",
+    "ed25519-hd-key": "^1.2.0",
+    "hdkey": "^2.0.1"
+  },
+  "devDependencies": {
+    "@metamask/eslint-config": "^4.0.0",
+    "eslint": "^7.7.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-mocha": "^8.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "mocha": "^8.1.3"
+  }
+}
