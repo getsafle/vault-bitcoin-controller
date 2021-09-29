@@ -54,7 +54,7 @@ class BTCHdKeyring {
     // const pair = bitcoinjs.ECPair.fromPrivateKey(this.wallet._privateKey, { network: helpers.utils.getNetwork(network) })
     // const { address } = bitcoinjs.payments.p2pkh({ network: helpers.utils.getNetwork(network), pubkey: pair.publicKey });
 
-    return { privkey };
+    return { privateKey: privkey };
   }
 
   /**
