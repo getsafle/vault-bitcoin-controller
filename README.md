@@ -39,7 +39,6 @@ This function is used to sign a transaction off-chain and then send it to the ne
 
 1. BTC transfer:<br />
    Trasaction to transfer BTC from one wallet/address to another.<br />The transaction object is of the following type:
-
 ```
 TransactionObj: {
     data: {
@@ -50,9 +49,7 @@ TransactionObj: {
 }
 ```
 
-
 **parameters:**
-
 ```
 name: transaction,
 type: TransactionObj, // refer to the above trancationObj types.
@@ -62,14 +59,12 @@ type: string,
 default: MAINNET (undefined)
 optional
 ```
-
 **returns:** `{signedTransaction: string} hex_string of signed raw transaction`
 
 #### signMessage(message: _string_, connectionUrl?: _string_)
 
 This function is used to sign a message. <br />
 **parameters:**
-
 ```
 name: message
 type: string
@@ -79,7 +74,6 @@ type: string,
 default: MAINNET (undefined)
 optional
 ```
-
 **returns:** `{signedMessage: string} // signed message hex string`
 
 #### getAccounts()
@@ -95,7 +89,6 @@ wallet_object: BIP32 object
 
 This function is used send the signed transaction onto the chain. <br />
 **parameters:**
-
 ```
 name: rawTransaction, // signed raw transaction (got from signedTransaction())
 type: Buffer | UInt8Array
@@ -105,7 +98,6 @@ type: string,
 default: MAINNET (undefined)
 optional
 ```
-
 **returns:** `{transactionDetails : Object} // transaction details with transaction hash`
 
 
