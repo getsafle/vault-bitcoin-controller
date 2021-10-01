@@ -26,8 +26,6 @@ class BTCHdKeyring {
 
     this.wallet = extendedKeys
 
-    console.log("extendedKeys", extendedKeys.toBase58(), extendedKeys.neutered().toBase58() )
-
     const { address } = helpers.utils.generateAddress(extendedKeys, helpers.utils.getNetwork(network), 0)
 
     this.address = address
@@ -99,7 +97,7 @@ class BTCHdKeyring {
 
   async signMessage(message, connectionUrl) {
     const { wallet } = helpers.utils.generateAddress(this.wallet, helpers.utils.getNetwork(connectionUrl), 0)
-    var signature = bitcoinMessage.sign(message, wallet.privateKey, wallet.compressed, { extraEntropy: randomBytes(32) })
+    var signature = bitcoinMessage.sign(message, wallet.privateKey, wallet.compressed, { segwitType: 'p2wpkh', extraEntropy: randomBytes(32) })
 
     return { signedMessage: signature.toString('base64') };
   }
