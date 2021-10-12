@@ -30,27 +30,11 @@ class BTCHdKeyring {
 
     this.address = address
 
-    // const hdWallet = hdkey.fromMasterSeed(seed)
-    // const root = hdWallet.derive(this.hdPath)
-    // this.wallet = root.deriveChild("m/0'")
-
-    // const pubkey = Buffer.from(this.wallet.publicKey.toString('hex'), 'hex')
-    // const privkey = Buffer.from(this.wallet.privateKey.toString('hex'), 'hex')
-    // const { address: legacyAddress } = await bitcoinjs.payments.p2pkh({ network: helpers.utils.getNetwork(network), pubkey })
-    // this.address = legacyAddress;
-
-    // console.log("privkey ", privkey, this.wallet.privateKey, this.wallet.privateKey.toString('hex'))
-    // console.log("this.wallet.privateExtendedKey", this.wallet.privateExtendedKey, this.wallet.privateExtendedKey.toString('hex'))
-    // console.log("this.wallet.publicExtendedKey", this.wallet.publicExtendedKey, this.wallet.publicExtendedKey.toString('hex'))
     return { wallet: this.wallet, address: this.address }
   }
 
   async exportPrivateKey(network) {
     const { address, privkey } = helpers.utils.generateAddress(this.wallet, helpers.utils.getNetwork(network), 0)
-
-    // const privateKey = this.wallet._privateKey.toString('hex');
-    // const pair = bitcoinjs.ECPair.fromPrivateKey(this.wallet._privateKey, { network: helpers.utils.getNetwork(network) })
-    // const { address } = bitcoinjs.payments.p2pkh({ network: helpers.utils.getNetwork(network), pubkey: pair.publicKey });
 
     return { privateKey: privkey };
   }
@@ -69,29 +53,10 @@ class BTCHdKeyring {
     const { data: { to, amount }, txnType } = transaction
 
     const URL = `https://sochain.com/api/v2/get_tx_unspent/${connectionUrl === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${this.address}`
-    // const utxos = await axios.get(URL);
-
-    // console.log("utxos.data.data.txs ", utxos, utxos.data.data.txs, this.address)
-
-    // const utxoId = utxos.data.data.txs[0].txid
-
-    // const keyPair = bitcoinjs.ECPair.fromPrivateKey(this.wallet.privateKey, { network: helpers.utils.getNetwork(connectionUrl) })
     const { address, privkey } = helpers.utils.generateAddress(this.wallet, helpers.utils.getNetwork(connectionUrl), 0)
-
-    // var tx = new bitcoinjs.TransactionBuilder(helpers.utils.getNetwork(connectionUrl));
-    // var tx = new bitcoinjs.Psbt({ network: helpers.utils.getNetwork(connectionUrl) })
-    // TransactionBuilder(helpers.utils.getNetwork(connectionUrl));
     if (txnType === NATIVE_TRANSFER) {
       const signedTransaction = await helpers.signTransaction(this.address, to, amount, URL, privkey)
       return { signedTransaction };
-      // utxos.data.data.txs.forEach((val, key) => tx.addInput({ hash: val.txid, index: output_no }))
-      // // tx.addInput(utxoId, 0)
-      // tx.addOutput({ address: to, value: amount })
-      // tx.signAllInputs(keyPair);
-      // // tx.signInput(0, keyPair);
-      // tx.validateSignaturesOfAllInputs()
-      // tx.finalizeAllInputs();
-      // return { signedTransaction: tx.extractTransaction().toHex() };
     }
   }
 
