@@ -11,9 +11,6 @@ const {
         TESTNET,
         MAINNET
     },
-    BITCOIN_TRANSACTION: {
-        NATIVE_TRANSFER
-    },
     TRANSFER_BTC: {
         BTC_AMOUNT,
         BTC_RECEIVER
@@ -25,7 +22,7 @@ const BTC_TXN_PARAM = {
         data: {
             to: BTC_RECEIVER,
             amount: BTC_AMOUNT,
-        }, txnType: NATIVE_TRANSFER
+        }
     },
     connectionUrl: TESTNET
 }
@@ -61,6 +58,11 @@ describe('Initialize wallet ', () => {
         const signedMessage3 = await bitcoinWallet.signMessage(TESTING_MESSAGE_3, TESTNET)
         console.log("Signed message 3: ", signedMessage3)
         assert(bitcoinMessage.verify(TESTING_MESSAGE_3, bitcoinWallet.address, signedMessage3.signedMessage), "Should verify message 3")
+    })
+
+    it("Get fees", async () => {
+        const { transactionFees } = await bitcoinWallet.getFee(BTC_TXN_PARAM.connectionUrl);
+        console.log("transactionFees ", transactionFees)
     })
 
     it("Sign Transaction", async () => {

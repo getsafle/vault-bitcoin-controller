@@ -9,13 +9,11 @@ module.exports = {
 
     TRANSFER_BTC: {
         BTC_RECEIVER: 'mnqrY9Jse79MqQCEDJrWg6MCAakNuKMJC2', // generated from HD_WALLET_12_MNEMONIC_TEST_OTHER
-        BTC_AMOUNT: 0.0001
+        // BTC_AMOUNT: 0.0001
+        BTC_AMOUNT: 0.00001
     },
     BITCOIN_NETWORK: {
         MAINNET: 'MAINNET',
         TESTNET: 'TESTNET',
-    },
-    BITCOIN_TRANSACTION: {
-        NATIVE_TRANSFER: "NATIVE_TRANSFER"
-    },
+    }
 }

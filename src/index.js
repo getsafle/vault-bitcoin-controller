@@ -40,7 +40,7 @@ class BTCHdKeyring {
   }
 
   /**
- * NATIVE_TRANSFER : { data : {to, amount}, txnType: NATIVE_TRANSFER }
+ * NATIVE_TRANSFER : { data : {to, amount}}
  *     
  */
   /**
@@ -50,14 +50,12 @@ class BTCHdKeyring {
    * @returns 
    */
   async signTransaction(transaction, connectionUrl) {
-    const { data: { to, amount }, txnType } = transaction
+    const { data: { to, amount } } = transaction
 
     const URL = `https://sochain.com/api/v2/get_tx_unspent/${connectionUrl === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${this.address}`
     const { address, privkey } = helpers.utils.generateAddress(this.wallet, helpers.utils.getNetwork(connectionUrl), 0)
-    if (txnType === NATIVE_TRANSFER) {
-      const signedTransaction = await helpers.signTransaction(this.address, to, amount, URL, privkey)
-      return { signedTransaction };
-    }
+    const signedTransaction = await helpers.signTransaction(this.address, to, amount, URL, privkey)
+    return { signedTransaction };
   }
 
   async signMessage(message, connectionUrl) {
@@ -83,6 +81,12 @@ class BTCHdKeyring {
 
     return { transactionDetails: result }
 
+  }
+
+  async getFee(connectionUrl) {
+    const URL = `https://sochain.com/api/v2/get_tx_unspent/${connectionUrl === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${this.address}`
+    const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL)
+    return { transactionFees: fee }
   }
 }
 

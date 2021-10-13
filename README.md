@@ -35,7 +35,7 @@ This function is used to export the private key for the generated address. <br /
 
 #### signTransaction(transaction: _TransactionObj_ , connectionUrl?: _string_ )
 
-This function is used to sign a transaction off-chain and then send it to the network.<br /> Transactions are of 4 types:
+This function is used to sign a transaction off-chain and then send it to the network.<br /> Transactions type is as below:
 
 1. BTC transfer:<br />
    Trasaction to transfer BTC from one wallet/address to another.<br />The transaction object is of the following type:
@@ -44,8 +44,7 @@ TransactionObj: {
     data: {
         to, // destination address
         amount, // amount
-    },
-    txnType: NATIVE_TRANSFER // type constant
+    }
 }
 ```
 
@@ -100,6 +99,12 @@ optional
 ```
 **returns:** `{transactionDetails : Object} // transaction details with transaction hash`
 
+#### getFee(connectionUrl?: _string_)
+
+This function is used to get the transaction fees. <br />
+
+**parameters:** - <br />
+**returns:** `{transactionFees: integer} // transaction fees`
 
 ## Note
 
