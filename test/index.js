@@ -46,6 +46,11 @@ describe('Initialize wallet ', () => {
         console.log("privateKey, ", privateKey)
     })
 
+    it("Should get account ", async () => {
+        const accounts = await bitcoinWallet.getAccounts(TESTNET)
+        console.log("accounts, ", accounts)
+    })
+
     it("Sign message", async () => {
         const signedMessage1 = await bitcoinWallet.signMessage(TESTING_MESSAGE_1, TESTNET)
         console.log("Signed message 1: ", signedMessage1)

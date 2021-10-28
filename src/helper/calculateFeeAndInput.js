@@ -23,8 +23,8 @@ async function getFeeAndInput(URL) {
         inputs.push(utxo);
     });
 
-    transactionSize = inputCount * 146 + outputCount * 34 + 10 - inputCount;
-    // Check if we have enough funds to cover the transaction and the fees assuming we want to pay 20 satoshis per byte
+    transactionSize = inputCount * 180 + outputCount * 34 + 10 - inputCount;
+    // the fees assuming we want to pay 20 satoshis per byte
 
     fee = transactionSize * 20
     return {totalAmountAvailable, inputs, fee}
