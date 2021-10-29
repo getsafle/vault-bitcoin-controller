@@ -65,10 +65,8 @@ class BTCHdKeyring {
     return { signedMessage: signature.toString('base64') };
   }
 
-  async getAccounts(network) {
-    const { address } = helpers.utils.generateAddress(extendedKeys, helpers.utils.getNetwork(network), 0)
-
-    return { address }
+  async getAccounts() {
+    return { address: this.address }
   }
 
   async sendTransaction(rawTransaction, connectionUrl) {

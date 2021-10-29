@@ -78,11 +78,9 @@ optional
 #### getAccounts()
 
 This function is used to get the wallet address. <br />
-```
-wallet_object: BIP32 object
-```
+
 **parameters:** - <br />
-**returns:** `{address: wallet_object} // wallet address`
+**returns:** `{address: string} // wallet address`
 
 #### sendTransaction(rawTransaction: _Buffer_ | _UInt8Array_ , connectionUrl?: _string_)
 

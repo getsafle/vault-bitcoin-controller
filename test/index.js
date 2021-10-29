@@ -47,7 +47,7 @@ describe('Initialize wallet ', () => {
     })
 
     it("Should get account ", async () => {
-        const accounts = await bitcoinWallet.getAccounts(TESTNET)
+        const accounts = await bitcoinWallet.getAccounts()
         console.log("accounts, ", accounts)
     })
 
