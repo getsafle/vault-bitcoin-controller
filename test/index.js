@@ -75,7 +75,7 @@ describe('Initialize wallet ', () => {
         console.log("signedTransaction ", signedTransaction)
 
         // const sendTransaction = await bitcoinWallet.sendTransaction(signedTransaction, BTC_TXN_PARAM.connectionUrl)
-        // console.log("sendTransaction ", sendTransaction.transactionDetails.data)
+        // console.log("sendTransaction ", sendTransaction)
     })
 
 })

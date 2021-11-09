@@ -79,7 +79,7 @@ class BTCHdKeyring {
       },
     });
 
-    return { transactionDetails: result }
+    return { transactionDetails: result && result.data && result.data.data ? result.data.data.txid : result }
 
   }
 
