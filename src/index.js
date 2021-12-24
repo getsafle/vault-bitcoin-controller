@@ -22,7 +22,7 @@ class BTCHdKeyring {
    * network = TESTNET | MAINNET 
    */
   constructor(opts) {
-    this.store = new ObservableStore({ mnemonic: opts.mnemonic, hdPath: HD_PATH, network: helpers.utils.getNetwork(opts.network), networkType: opts.network, wallet: null, address: [] })
+    this.store = new ObservableStore({ mnemonic: opts.mnemonic, hdPath: HD_PATH, network: helpers.utils.getNetwork(opts.network), networkType: opts.network ? opts.network : MAINNET.NETWORK, wallet: null, address: [] })
     this.generateWallet()
   }
 
@@ -51,12 +51,14 @@ class BTCHdKeyring {
   async exportPrivateKey(_address) {
     const { wallet, network, address } = this.store.getState()
     const idx = address.indexOf(_address)
+    if (idx < 0)
+      throw "Invalid address, the address is not available in the wallet"
     const { privkey } = helpers.utils.generateAddress(wallet, network, idx)
     return { privateKey: privkey };
   }
 
   /**
- * NATIVE_TRANSFER : { data : {from, to, amount}}
+ * NATIVE_TRANSFER : {from, to, amount}
  *     
  */
   /**
@@ -66,53 +68,61 @@ class BTCHdKeyring {
    */
   async signTransaction(transaction) {
     const { wallet, network, address, networkType } = this.store.getState()
-    const { data: { from, to, amount } } = transaction
+    const { from, to, amount } = transaction
     const idx = address.indexOf(from)
+    if (idx < 0)
+      throw "Invalid address, the address is not available in the wallet"
     const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
     const { privkey } = helpers.utils.generateAddress(wallet, network, idx)
-    const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey)
-    return { signedTransaction };
+    try {
+      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey)
+      return { signedTransaction };
+    } catch (err) {
+      throw err
+    }
   }
 
   async signMessage(message, _address) {
     const { wallet, network, address } = this.store.getState()
     const idx = address.indexOf(_address);
-    const { wallet: _wallet } = helpers.utils.generateAddress(wallet, network, idx)
-    var signature = bitcoinMessage.sign(message, _wallet.privateKey, _wallet.compressed, { segwitType: 'p2wpkh', extraEntropy: randomBytes(32) })
-    return { signedMessage: signature.toString('base64') };
+    if (idx < 0)
+      throw "Invalid address, the address is not available in the wallet"
+    try {
+      const { wallet: _wallet } = helpers.utils.generateAddress(wallet, network, idx)
+      var signature = bitcoinMessage.sign(message, _wallet.privateKey, _wallet.compressed, { segwitType: 'p2wpkh', extraEntropy: randomBytes(32) })
+      return { signedMessage: signature.toString('base64') };
+    } catch (err) {
+      throw err
+    }
   }
 
   async sendTransaction(rawTransaction) {
     const { networkType } = this.store.getState()
-    const result = await axios({
-      method: "POST",
-      url: `https://sochain.com/api/v2/send_tx/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`,
-      data: {
-        tx_hex: rawTransaction,
-      },
-    });
-    return { transactionDetails: result && result.data && result.data.data ? result.data.data.txid : result }
-
+    try {
+      const result = await axios({
+        method: "POST",
+        url: `https://sochain.com/api/v2/send_tx/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`,
+        data: {
+          tx_hex: rawTransaction,
+        },
+      });
+      return { transactionDetails: result && result.data && result.data.data ? result.data.data.txid : result }
+    } catch (err) {
+      throw err
+    }
   }
 
   async getFee(address) {
     const { networkType } = this.store.getState()
-    const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
-    const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL)
-    return { transactionFees: fee }
+    try {
+      const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
+      const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL)
+      return { transactionFees: fee }
+    } catch (err) {
+      throw err
+    }
   }
 
-  /**
-     * Persist All Keyrings
-     *
-     * Iterates the current `keyrings` array,
-     * serializes each one into a serialized array,
-     * encrypts that array with the provided `password`,
-     * and persists that encrypted string to storage.
-     *
-     * @param {string} password - The keyring controller password.
-     * @returns {Promise<boolean>} Resolves to true once keyrings are persisted.
-     */
   persistAllAddress(_address) {
     const { address } = this.store.getState()
     const newAdd = address

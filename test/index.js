@@ -18,13 +18,8 @@ const {
 } = require('./constants')
 
 const BTC_TXN_PARAM = {
-    transaction: {
-        data: {
-            to: BTC_RECEIVER,
-            amount: BTC_AMOUNT,
-        }
-    },
-    connectionUrl: TESTNET
+    to: BTC_RECEIVER,
+    amount: BTC_AMOUNT,
 }
 
 const opts = {
@@ -78,8 +73,8 @@ describe('Initialize wallet ', () => {
 
     it("Sign Transaction", async () => {
         const acc = await bitcoinWallet.getAccounts()
-        BTC_TXN_PARAM.transaction.data['from'] = acc[0]
-        const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM.transaction);
+        BTC_TXN_PARAM['from'] = acc[0]
+        const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
         console.log("signedTransaction ", signedTransaction)
 
         const sendTransaction = await bitcoinWallet.sendTransaction(signedTransaction)
