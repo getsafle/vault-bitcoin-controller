@@ -8,8 +8,7 @@ module.exports = {
     TESTING_MESSAGE_3: "This message three is for testing",
 
     TRANSFER_BTC: {
-        BTC_RECEIVER: 'mnqrY9Jse79MqQCEDJrWg6MCAakNuKMJC2', // generated from HD_WALLET_12_MNEMONIC_TEST_OTHER
-        // BTC_AMOUNT: 0.0001
+        BTC_RECEIVER: 'tb1qrgz6q6mmm6gxplyg00k5ehkhf76qlx7x083k38', // address at index 1
         BTC_AMOUNT: 0.00001
     },
     BITCOIN_NETWORK: {

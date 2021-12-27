@@ -18,64 +18,67 @@ const {
 } = require('./constants')
 
 const BTC_TXN_PARAM = {
-    transaction: {
-        data: {
-            to: BTC_RECEIVER,
-            amount: BTC_AMOUNT,
-        }
-    },
-    connectionUrl: TESTNET
+    to: BTC_RECEIVER,
+    amount: BTC_AMOUNT,
+}
+
+const opts = {
+    mnemonic: HD_WALLET_12_MNEMONIC,
+    network: TESTNET
 }
 
 describe('Initialize wallet ', () => {
-    const bitcoinWallet = new Bitcoin(HD_WALLET_12_MNEMONIC)
+    const bitcoinWallet = new Bitcoin(opts)
 
-    it("Should have correct mnemonic", () => {
-        assert.equal(bitcoinWallet.mnemonic, HD_WALLET_12_MNEMONIC, "Incorrect hd wallet")
+    it("Should generate new address ", async () => {
+        const wallet = await bitcoinWallet.addAccount()
+        console.log("wallet, ", wallet)
+        const wallet2 = await bitcoinWallet.addAccount()
+        console.log("wallet2, ", wallet2)
     })
 
-    it("Should generateWallet ", async () => {
-        assert(bitcoinWallet.address === null)
-        const wallet = await bitcoinWallet.generateWallet(TESTNET)
-        console.log("wallet, ", wallet)
-        assert(bitcoinWallet.address !== null)
+    it("Should get accounts", async () => {
+        const acc = await bitcoinWallet.getAccounts()
+        console.log("acc ", acc)
+        assert(acc.length === 2, "Should have 2 addresses")
     })
 
     it("Should get privateKey ", async () => {
-        const privateKey = await bitcoinWallet.exportPrivateKey(TESTNET)
+        const acc = await bitcoinWallet.getAccounts()
+        const privateKey = await bitcoinWallet.exportPrivateKey(acc[0])
         console.log("privateKey, ", privateKey)
     })
 
-    it("Should get account ", async () => {
-        const accounts = await bitcoinWallet.getAccounts()
-        console.log("accounts, ", accounts)
-    })
-
     it("Sign message", async () => {
-        const signedMessage1 = await bitcoinWallet.signMessage(TESTING_MESSAGE_1, TESTNET)
+        const acc = await bitcoinWallet.getAccounts()
+
+        const signedMessage1 = await bitcoinWallet.signMessage(TESTING_MESSAGE_1, acc[0])
         console.log("Signed message 1: ", signedMessage1)
-        assert(bitcoinMessage.verify(TESTING_MESSAGE_1, bitcoinWallet.address, signedMessage1.signedMessage), "Should verify message 1")
+        assert(bitcoinMessage.verify(TESTING_MESSAGE_1, acc[0], signedMessage1.signedMessage), "Should verify message 1")
 
-        const signedMessage2 = await bitcoinWallet.signMessage(TESTING_MESSAGE_2, TESTNET)
+        const signedMessage2 = await bitcoinWallet.signMessage(TESTING_MESSAGE_2, acc[0])
         console.log("Signed message 2: ", signedMessage2)
-        assert(bitcoinMessage.verify(TESTING_MESSAGE_2, bitcoinWallet.address, signedMessage2.signedMessage), "Should verify message 2")
+        assert(bitcoinMessage.verify(TESTING_MESSAGE_2, acc[0], signedMessage2.signedMessage), "Should verify message 2")
 
-        const signedMessage3 = await bitcoinWallet.signMessage(TESTING_MESSAGE_3, TESTNET)
+        const signedMessage3 = await bitcoinWallet.signMessage(TESTING_MESSAGE_3, acc[0])
         console.log("Signed message 3: ", signedMessage3)
-        assert(bitcoinMessage.verify(TESTING_MESSAGE_3, bitcoinWallet.address, signedMessage3.signedMessage), "Should verify message 3")
+        assert(bitcoinMessage.verify(TESTING_MESSAGE_3, acc[0], signedMessage3.signedMessage), "Should verify message 3")
     })
 
     it("Get fees", async () => {
-        const { transactionFees } = await bitcoinWallet.getFee(BTC_TXN_PARAM.connectionUrl);
+        const acc = await bitcoinWallet.getAccounts()
+        const { transactionFees } = await bitcoinWallet.getFee(acc[0]);
         console.log("transactionFees ", transactionFees)
     })
 
     it("Sign Transaction", async () => {
-        const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM.transaction, BTC_TXN_PARAM.connectionUrl);
+        const acc = await bitcoinWallet.getAccounts()
+        BTC_TXN_PARAM['from'] = acc[0]
+        const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
         console.log("signedTransaction ", signedTransaction)
 
-        // const sendTransaction = await bitcoinWallet.sendTransaction(signedTransaction, BTC_TXN_PARAM.connectionUrl)
-        // console.log("sendTransaction ", sendTransaction)
+        const sendTransaction = await bitcoinWallet.sendTransaction(signedTransaction)
+        console.log("sendTransaction ", sendTransaction)
     })
 
 })
