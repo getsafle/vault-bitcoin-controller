@@ -1,4 +1,3 @@
-const axios = require('axios')
 const bitcore = require("bitcore-lib")
 const { SATOSHI } = require("../config/index")
 
@@ -10,7 +9,7 @@ async function signTransaction(from, to, amountToSend, URL, privateKey) {
 
     const transaction = new bitcore.Transaction();
 
-    const {totalAmountAvailable, inputs, fee} = await getFeeAndInput(URL)
+    const { totalAmountAvailable, inputs, fee } = await getFeeAndInput(URL)
 
     if (totalAmountAvailable - satoshiToSend - fee < 0) {
         throw new Error("Balance is too low for this transaction");

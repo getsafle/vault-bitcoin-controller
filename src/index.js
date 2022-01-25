@@ -1,7 +1,4 @@
-const { EventEmitter } = require('events')
-const log = require('loglevel')
 const ObservableStore = require('obs-store')
-const encryptor = require('browser-passworder')
 
 const bitcoinjs = require('bitcoinjs-lib')
 const bitcoinMessage = require('bitcoinjs-message')
