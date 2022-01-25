@@ -4,7 +4,7 @@
 
 `npm install --save @getsafle/vault-bitcoin-controller`
 
-## Initialize the Polygon Controller class
+## Initialize the Bitcoin Controller class
 
 ```
 const controller = require('@getsafle/vault-bitcoin-controller');
