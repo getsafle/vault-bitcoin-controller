@@ -4,6 +4,14 @@ const Bitcoin = require('../src/index')
 const {
     HD_WALLET_12_MNEMONIC,
     HD_WALLET_12_MNEMONIC_TEST_OTHER,
+    EXTERNAL_ACCOUNT_PRIVATE_KEY,
+    EXTERNAL_ACCOUNT_ADDRESS,
+    EXTERNAL_ACCOUNT_PRIVATE_KEY_MAINNET,
+    EXTERNAL_ACCOUNT_ADDRESS_MAINNET,
+    EXTERNAL_ACCOUNT_WRONG_PRIVATE_KEY_1,
+    EXTERNAL_ACCOUNT_WRONG_PRIVATE_KEY_2,
+    EXTERNAL_ACCOUNT_WRONG_PRIVATE_KEY_3,
+    EXTERNAL_ACCOUNT_WRONG_PRIVATE_KEY_4,
     TESTING_MESSAGE_1,
     TESTING_MESSAGE_2,
     TESTING_MESSAGE_3,
@@ -79,6 +87,17 @@ describe('Initialize wallet ', () => {
 
         const sendTransaction = await bitcoinWallet.sendTransaction(signedTransaction)
         console.log("sendTransaction ", sendTransaction)
+    })
+
+    it("Should import correct account ", async () => {
+        if (opts.network === MAINNET) {
+            const address = await bitcoinWallet.importWallet(EXTERNAL_ACCOUNT_PRIVATE_KEY_MAINNET)
+            assert(address.toLowerCase() === EXTERNAL_ACCOUNT_ADDRESS_MAINNET.toLowerCase(), "Wrong address")
+        } else {
+            const address = await bitcoinWallet.importWallet(EXTERNAL_ACCOUNT_PRIVATE_KEY)
+            assert(address.toLowerCase() === EXTERNAL_ACCOUNT_ADDRESS.toLowerCase(), "Wrong address")
+        }
+        assert(bitcoinWallet.importedWallets.length === 1, "Should have 1 imported wallet")
     })
 
 })

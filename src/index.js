@@ -1,7 +1,4 @@
-const { EventEmitter } = require('events')
-const log = require('loglevel')
 const ObservableStore = require('obs-store')
-const encryptor = require('browser-passworder')
 
 const bitcoinjs = require('bitcoinjs-lib')
 const bitcoinMessage = require('bitcoinjs-message')
@@ -24,6 +21,7 @@ class BTCHdKeyring {
   constructor(opts) {
     this.store = new ObservableStore({ mnemonic: opts.mnemonic, hdPath: HD_PATH, network: helpers.utils.getNetwork(opts.network), networkType: opts.network ? opts.network : MAINNET.NETWORK, wallet: null, address: [] })
     this.generateWallet()
+    this.importedWallets = []
   }
 
   generateWallet() {
@@ -55,6 +53,17 @@ class BTCHdKeyring {
       throw "Invalid address, the address is not available in the wallet"
     const { privkey } = helpers.utils.generateAddress(wallet, network, idx)
     return { privateKey: privkey };
+  }
+
+  async importWallet(_privateKey) {
+    try {
+      const { network } = this.store.getState()
+      const address = helpers.utils.getAddressFromPk(_privateKey, network)
+      this.importedWallets.push(address);
+      return address
+    } catch (e) {
+      return Promise.reject(e)
+    }
   }
 
   /**
