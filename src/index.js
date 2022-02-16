@@ -10,7 +10,7 @@ const helpers = require('./helper/index')
 
 const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET } } = require('./config/index')
 
-class BTCHdKeyring {
+class KeyringController {
 
   /**
    * 
@@ -155,4 +155,4 @@ const getBalance = async (address, networkType) => {
   }
 }
 
-module.exports = { BTCHdKeyring, getBalance }
+module.exports = { KeyringController, getBalance }

@@ -1,6 +1,6 @@
 var assert = require('assert');
 const bitcoinMessage = require('bitcoinjs-message')
-const { BTCHdKeyring: Bitcoin, getBalance } = require('../src/index')
+const { KeyringController: Bitcoin, getBalance } = require('../src/index')
 const {
     HD_WALLET_12_MNEMONIC,
     HD_WALLET_12_MNEMONIC_TEST_OTHER,

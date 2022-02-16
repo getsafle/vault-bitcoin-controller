@@ -7,9 +7,9 @@
 ## Initialize the Bitcoin Controller class
 
 ```
-const controller = require('@getsafle/vault-bitcoin-controller');
+const { KeyringController, getBalance } = require('@getsafle/vault-bitcoin-controller');
 
-const bitcoinController = new controller({
+const bitcoinController = new KeyringController({
     // 12 words mnemonic to create wallet
     mnemonic: string,
     // network - type of network [TESTNET|MAINNET]
