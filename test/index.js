@@ -1,6 +1,6 @@
 var assert = require('assert');
 const bitcoinMessage = require('bitcoinjs-message')
-const Bitcoin = require('../src/index')
+const { BTCHdKeyring: Bitcoin, getBalance } = require('../src/index')
 const {
     HD_WALLET_12_MNEMONIC,
     HD_WALLET_12_MNEMONIC_TEST_OTHER,
@@ -98,6 +98,13 @@ describe('Initialize wallet ', () => {
             assert(address.toLowerCase() === EXTERNAL_ACCOUNT_ADDRESS.toLowerCase(), "Wrong address")
         }
         assert(bitcoinWallet.importedWallets.length === 1, "Should have 1 imported wallet")
+    })
+
+    it("Should get balance of the address ", async () => {
+        const acc = await bitcoinWallet.getAccounts()
+        const balance = await getBalance(acc[0], opts.network)
+        console.log("acc ", acc)
+        console.log("balance ", balance)
     })
 
 })
