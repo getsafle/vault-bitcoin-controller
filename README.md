@@ -61,5 +61,5 @@ const fees = await bitcoinController.getFee(address);
 ### Get balance
 
 ```
-const fees = await getBalance(address, network); // if network !== TESTNET then it will fetch mainnet balance
+const balance = await getBalance(address, network); // if network !== TESTNET then it will fetch mainnet balance
 ```
