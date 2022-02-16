@@ -57,3 +57,9 @@ const signedMsg = await bitcoinController.signMessage(msgString, address);
 ```
 const fees = await bitcoinController.getFee(address);
 ```
+
+### Get balance
+
+```
+const fees = await getBalance(address, network); // if network !== TESTNET then it will fetch mainnet balance
+```
