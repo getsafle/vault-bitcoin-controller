@@ -84,9 +84,6 @@ describe('Initialize wallet ', () => {
         BTC_TXN_PARAM['from'] = acc[0]
         const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
         console.log("signedTransaction ", signedTransaction)
-
-        // const sendTransaction = await bitcoinWallet.sendTransaction(signedTransaction)
-        // console.log("sendTransaction ", sendTransaction)
     })
 
     it("Should import correct account ", async () => {
