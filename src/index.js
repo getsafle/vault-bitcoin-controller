@@ -10,8 +10,7 @@ const helpers = require('./helper/index')
 
 const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET } } = require('./config/index')
 
-
-class BTCHdKeyring {
+class KeyringController {
 
   /**
    * 
@@ -146,4 +145,14 @@ class BTCHdKeyring {
 
 }
 
-module.exports = BTCHdKeyring
+const getBalance = async (address, networkType) => {
+  try {
+    const URL = `https://sochain.com/api/v2/get_address_balance/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
+    const balance = await axios.get(URL)
+    return { balance: balance.data.data.confirmed_balance }
+  } catch (err) {
+    throw err
+  }
+}
+
+module.exports = { KeyringController, getBalance }

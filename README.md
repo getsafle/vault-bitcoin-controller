@@ -7,9 +7,9 @@
 ## Initialize the Bitcoin Controller class
 
 ```
-const controller = require('@getsafle/vault-bitcoin-controller');
+const { KeyringController, getBalance } = require('@getsafle/vault-bitcoin-controller');
 
-const bitcoinController = new controller({
+const bitcoinController = new KeyringController({
     // 12 words mnemonic to create wallet
     mnemonic: string,
     // network - type of network [TESTNET|MAINNET]
@@ -56,4 +56,10 @@ const signedMsg = await bitcoinController.signMessage(msgString, address);
 
 ```
 const fees = await bitcoinController.getFee(address);
+```
+
+### Get balance
+
+```
+const balance = await getBalance(address, network); // if network !== TESTNET then it will fetch mainnet balance
 ```
