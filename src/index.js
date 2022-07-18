@@ -8,7 +8,7 @@ const axios = require("axios");
 
 const helpers = require('./helper/index')
 
-const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET } } = require('./config/index')
+const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }, DEFAULT_SATOSHI_PER_BYTE } = require('./config/index')
 
 class KeyringController {
 
@@ -76,14 +76,14 @@ class KeyringController {
    */
   async signTransaction(transaction) {
     const { wallet, network, address, networkType } = this.store.getState()
-    const { from, to, amount } = transaction
+    const { from, to, amount, satPerByte } = transaction
     const idx = address.indexOf(from)
     if (idx < 0)
       throw "Invalid address, the address is not available in the wallet"
     const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
     const { privkey } = helpers.utils.generateAddress(wallet, network, idx)
     try {
-      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey)
+      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey, satPerByte ? satPerByte : DEFAULT_SATOSHI_PER_BYTE)
       return { signedTransaction };
     } catch (err) {
       throw err
@@ -120,11 +120,11 @@ class KeyringController {
     }
   }
 
-  async getFee(address) {
+  async getFee(address, satPerByte = DEFAULT_SATOSHI_PER_BYTE) {
     const { networkType } = this.store.getState()
     try {
       const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
-      const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL)
+      const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL, satPerByte)
       return { transactionFees: fee }
     } catch (err) {
       throw err

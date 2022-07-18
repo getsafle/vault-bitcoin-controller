@@ -1,7 +1,7 @@
 const axios = require('axios')
-const { SATOSHI } = require("../config/index")
+const { SATOSHI, DEFAULT_SATOSHI_PER_BYTE } = require("../config/index")
 
-async function getFeeAndInput(URL) {
+async function getFeeAndInput(URL, satPerByte = DEFAULT_SATOSHI_PER_BYTE) {
 
     let fee = 0;
     let inputCount = 0;
@@ -25,9 +25,8 @@ async function getFeeAndInput(URL) {
 
     transactionSize = inputCount * 180 + outputCount * 34 + 10 - inputCount;
     // the fees assuming we want to pay 20 satoshis per byte
-
-    fee = transactionSize * 20
-    return {totalAmountAvailable, inputs, fee}
+    fee = transactionSize * satPerByte
+    return { totalAmountAvailable, inputs, fee }
 
 }
 
