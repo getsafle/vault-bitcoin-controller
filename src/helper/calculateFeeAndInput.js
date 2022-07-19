@@ -1,7 +1,7 @@
 const axios = require('axios')
-const { SATOSHI, DEFAULT_SATOSHI_PER_BYTE } = require("../config/index")
+const { SATOSHI } = require("../config/index")
 
-async function getFeeAndInput(URL, satPerByte = DEFAULT_SATOSHI_PER_BYTE) {
+async function getFeeAndInput(URL, satPerByte) {
 
     let fee = 0;
     let inputCount = 0;

@@ -15,6 +15,5 @@ module.exports = {
             ADDRESS: 0x6f
         }
     },
-    SATOSHI: 100000000,
-    DEFAULT_SATOSHI_PER_BYTE: 20
+    SATOSHI: 100000000
 }

@@ -43,7 +43,7 @@ const privateKey = await bitcoinController.getAccounts();
 ```
 const signedTx = await bitcoinController.signTransaction(bitcoinTx);
 
-bitcoinTx: {from, to, amount, satPerByte (optional)}
+bitcoinTx: {from, to, amount, satPerByt}
 ```
 
 ### Sign a message
@@ -55,7 +55,7 @@ const signedMsg = await bitcoinController.signMessage(msgString, address);
 ### Get fees
 
 ```
-const fees = await bitcoinController.getFee(address, satPerByte (optional));
+const fees = await bitcoinController.getFee(address, satPerByte);
 ```
 
 ### Get balance

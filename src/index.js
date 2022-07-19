@@ -8,7 +8,7 @@ const axios = require("axios");
 
 const helpers = require('./helper/index')
 
-const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }, DEFAULT_SATOSHI_PER_BYTE } = require('./config/index')
+const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET } } = require('./config/index')
 
 class KeyringController {
 
@@ -83,7 +83,7 @@ class KeyringController {
     const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
     const { privkey } = helpers.utils.generateAddress(wallet, network, idx)
     try {
-      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey, satPerByte ? satPerByte : DEFAULT_SATOSHI_PER_BYTE)
+      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey, satPerByte)
       return { signedTransaction };
     } catch (err) {
       throw err
@@ -120,7 +120,7 @@ class KeyringController {
     }
   }
 
-  async getFee(address, satPerByte = DEFAULT_SATOSHI_PER_BYTE) {
+  async getFee(address, satPerByte) {
     const { networkType } = this.store.getState()
     try {
       const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
