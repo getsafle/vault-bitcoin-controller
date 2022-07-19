@@ -1,15 +1,15 @@
 const bitcore = require("bitcore-lib")
-const { SATOSHI } = require("../config/index")
+const { SATOSHI, DEFAULT_SATOSHI_PER_BYTE } = require("../config/index")
 
 const getFeeAndInput = require('./calculateFeeAndInput')
 
-async function signTransaction(from, to, amountToSend, URL, privateKey) {
+async function signTransaction(from, to, amountToSend, URL, privateKey, satPerByte = DEFAULT_SATOSHI_PER_BYTE) {
 
     const satoshiToSend = amountToSend * SATOSHI;
 
     const transaction = new bitcore.Transaction();
 
-    const { totalAmountAvailable, inputs, fee } = await getFeeAndInput(URL)
+    const { totalAmountAvailable, inputs, fee } = await getFeeAndInput(URL, satPerByte)
 
     if (totalAmountAvailable - satoshiToSend - fee < 0) {
         throw new Error("Balance is too low for this transaction");

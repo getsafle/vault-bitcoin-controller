@@ -79,9 +79,23 @@ describe('Initialize wallet ', () => {
         console.log("transactionFees ", transactionFees)
     })
 
+    it("Get fees with custom satPerByte", async () => {
+        const acc = await bitcoinWallet.getAccounts()
+        const { transactionFees } = await bitcoinWallet.getFee(acc[0], 50);
+        console.log("transactionFees ", transactionFees)
+    })
+
     it("Sign Transaction", async () => {
         const acc = await bitcoinWallet.getAccounts()
         BTC_TXN_PARAM['from'] = acc[0]
+        const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
+        console.log("signedTransaction ", signedTransaction)
+    })
+
+    it("Sign Transaction custom satPerByte", async () => {
+        const acc = await bitcoinWallet.getAccounts()
+        BTC_TXN_PARAM['from'] = acc[0]
+        BTC_TXN_PARAM['satPerByte'] = 60
         const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
         console.log("signedTransaction ", signedTransaction)
     })

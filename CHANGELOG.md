@@ -15,3 +15,9 @@
 ##### Implement get balance functionality
 
 - Added getBalance() to fetch the balance in BTC.
+
+### 1.2.0 (2022-07-18)
+
+##### Custom gas parameter added
+
+- Added satPerByte to add custom gas parameter satoshi.
