@@ -73,7 +73,7 @@ describe('Initialize wallet ', () => {
         assert(bitcoinMessage.verify(TESTING_MESSAGE_3, acc[0], signedMessage3.signedMessage), "Should verify message 3")
     })
 
-    it("Get fees", async () => {
+    it("Get fees will return NaN", async () => {
         const acc = await bitcoinWallet.getAccounts()
         const { transactionFees } = await bitcoinWallet.getFee(acc[0]);
         console.log("transactionFees ", transactionFees)
@@ -85,11 +85,15 @@ describe('Initialize wallet ', () => {
         console.log("transactionFees ", transactionFees)
     })
 
-    it("Sign Transaction", async () => {
-        const acc = await bitcoinWallet.getAccounts()
-        BTC_TXN_PARAM['from'] = acc[0]
-        const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
-        console.log("signedTransaction ", signedTransaction)
+    it("Sign Transaction should fail and throw error", async () => {
+        try {
+            const acc = await bitcoinWallet.getAccounts()
+            BTC_TXN_PARAM['from'] = acc[0]
+            const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
+            console.log("signedTransaction ", signedTransaction)
+        } catch (err) {
+            console.log("Catching error ", err)
+        }
     })
 
     it("Sign Transaction custom satPerByte", async () => {

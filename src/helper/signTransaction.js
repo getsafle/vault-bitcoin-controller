@@ -3,7 +3,7 @@ const { SATOSHI, DEFAULT_SATOSHI_PER_BYTE } = require("../config/index")
 
 const getFeeAndInput = require('./calculateFeeAndInput')
 
-async function signTransaction(from, to, amountToSend, URL, privateKey, satPerByte = DEFAULT_SATOSHI_PER_BYTE) {
+async function signTransaction(from, to, amountToSend, URL, privateKey, satPerByte) {
 
     const satoshiToSend = amountToSend * SATOSHI;
 

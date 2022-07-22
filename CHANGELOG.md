@@ -21,3 +21,9 @@
 ##### Custom gas parameter added
 
 - Added satPerByte to add custom gas parameter satoshi.
+
+### 1.2.1 (2022-07-19)
+
+##### Make custom gas parameter compulsory
+
+- Changed satPerByte from optional to compulsory parameter.
