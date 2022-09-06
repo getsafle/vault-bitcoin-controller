@@ -13,7 +13,7 @@ async function getFeeAndInput(URL, satPerByte) {
     let inputs = [];
     utxos.data.data.txs.forEach(async (element) => {
         let utxo = {};
-        utxo.satoshis = Math.floor(Number(element.value) * SATOSHI);
+        utxo.satoshis = Math.ceil(parseFloat(element.value) * SATOSHI);
         utxo.script = element.script_hex;
         utxo.address = utxos.data.data.address;
         utxo.txId = element.txid;
