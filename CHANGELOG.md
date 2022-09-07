@@ -27,3 +27,9 @@
 ##### Make custom gas parameter compulsory
 
 - Changed satPerByte from optional to compulsory parameter.
+
+### 1.2.2 (2022-09-06)
+
+##### UTXO calculation fix
+
+- UTXO.satoshi calculation fix.
