@@ -33,3 +33,9 @@
 ##### UTXO calculation fix
 
 - UTXO.satoshi calculation fix.
+
+### 1.2.3 (2022-09-16)
+
+##### UTXO calculation fix
+
+- UTXO.satoshi calculation and adding package `satoshi-bitcoin`.

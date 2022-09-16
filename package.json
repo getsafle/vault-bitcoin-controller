@@ -1,6 +1,6 @@
 {
   "name": "@getsafle/vault-bitcoin-controller",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "",
   "engines": {
     "node": ">= 10"
@@ -31,7 +31,8 @@
     "bitcoinjs-lib": "^5.2.0",
     "bitcoinjs-message": "^2.2.0",
     "bitcore-lib": "^8.25.10",
-    "obs-store": "^4.0.3"
+    "obs-store": "^4.0.3",
+    "satoshi-bitcoin": "^1.0.5"
   },
   "devDependencies": {
     "@metamask/eslint-config": "^4.0.0",
