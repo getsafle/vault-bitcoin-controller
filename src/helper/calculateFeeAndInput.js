@@ -1,4 +1,5 @@
 const axios = require('axios')
+var sb = require("satoshi-bitcoin");
 const { SATOSHI } = require("../config/index")
 
 async function getFeeAndInput(URL, satPerByte) {
@@ -13,7 +14,7 @@ async function getFeeAndInput(URL, satPerByte) {
     let inputs = [];
     utxos.data.data.txs.forEach(async (element) => {
         let utxo = {};
-        utxo.satoshis = Math.ceil(parseFloat(element.value) * SATOSHI);
+        utxo.satoshis = sb.toSatoshi(parseFloat(element.value));
         utxo.script = element.script_hex;
         utxo.address = utxos.data.data.address;
         utxo.txId = element.txid;
