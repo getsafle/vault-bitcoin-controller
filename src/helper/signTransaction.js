@@ -3,13 +3,13 @@ const { SATOSHI, DEFAULT_SATOSHI_PER_BYTE } = require("../config/index")
 
 const getFeeAndInput = require('./calculateFeeAndInput')
 
-async function signTransaction(from, to, amountToSend, URL, privateKey, satPerByte) {
+async function signTransaction(from, to, amountToSend, URL, privateKey, satPerByte, headers) {
 
     const satoshiToSend = amountToSend * SATOSHI;
 
     const transaction = new bitcore.Transaction();
 
-    const { totalAmountAvailable, inputs, fee } = await getFeeAndInput(URL, satPerByte)
+    const { totalAmountAvailable, inputs, fee } = await getFeeAndInput(URL, satPerByte, headers)
 
     if (totalAmountAvailable - satoshiToSend - fee < 0) {
         throw new Error("Balance is too low for this transaction");
@@ -28,7 +28,7 @@ async function signTransaction(from, to, amountToSend, URL, privateKey, satPerBy
     transaction.fee(fee);
 
     // Sign transaction with your private key
-    transaction.sign(privateKey);
+    transaction.sign('cQM9i4ywrxiWhvwu87bshSTQFA5ZuDTcq1ifcXfJ5up5rvhSWpgi');
 
     // serialize Transactions
     const serializedTransaction = transaction.serialize();
