@@ -41,7 +41,7 @@ class KeyringController {
 
 
   async getAccounts() {
-    const address  = this.store.getState();
+    const { address } = this.store.getState();
     return address
   }
 

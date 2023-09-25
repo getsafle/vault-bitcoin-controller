@@ -28,7 +28,7 @@ async function signTransaction(from, to, amountToSend, URL, privateKey, satPerBy
     transaction.fee(fee);
 
     // Sign transaction with your private key
-    transaction.sign('cQM9i4ywrxiWhvwu87bshSTQFA5ZuDTcq1ifcXfJ5up5rvhSWpgi');
+    transaction.sign(privateKey);
 
     // serialize Transactions
     const serializedTransaction = transaction.serialize();
