@@ -59,7 +59,6 @@ class KeyringController {
       const { network } = this.store.getState()
       const address = helpers.utils.getAddressFromPk(_privateKey, network)
       this.importedWallets.push(address);
-      this.persistAllAddress(address)
       return address
     } catch (e) {
       return Promise.reject(e)
