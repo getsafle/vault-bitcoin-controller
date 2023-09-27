@@ -32,7 +32,7 @@ const BTC_TXN_PARAM = {
 
 const opts = {
     mnemonic: HD_WALLET_12_MNEMONIC,
-    network: TESTNET
+    network: MAINNET
 }
 
 describe('Initialize wallet ', () => {
