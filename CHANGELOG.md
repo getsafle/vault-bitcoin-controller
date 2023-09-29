@@ -39,3 +39,8 @@
 ##### UTXO calculation fix
 
 - UTXO.satoshi calculation and adding package `satoshi-bitcoin`.
+
+### 2.0.0 (2023-09-25)
+
+#####  Sochain api update for UTXO calculation
+#####  Derivation path update for the P2WPKH standard addresses

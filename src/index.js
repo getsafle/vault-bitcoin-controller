@@ -8,7 +8,7 @@ const axios = require("axios");
 
 const helpers = require('./helper/index')
 
-const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET } } = require('./config/index')
+const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }, SOCHAIN_API_KEY } = require('./config/index')
 
 class KeyringController {
 
@@ -80,10 +80,11 @@ class KeyringController {
     const idx = address.indexOf(from)
     if (idx < 0)
       throw "Invalid address, the address is not available in the wallet"
-    const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
+    const URL = `https://sochain.com/api/v3/unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
+    const headers = { "API-KEY": SOCHAIN_API_KEY}
     const { privkey } = helpers.utils.generateAddress(wallet, network, idx)
     try {
-      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey, satPerByte)
+      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey, satPerByte, headers)
       return { signedTransaction };
     } catch (err) {
       throw err
@@ -104,17 +105,19 @@ class KeyringController {
     }
   }
 
-  async sendTransaction(rawTransaction) {
+  async sendTransaction(TransactionHex) {
     const { networkType } = this.store.getState()
     try {
+      const headers = { "API-KEY": SOCHAIN_API_KEY}
       const result = await axios({
         method: "POST",
-        url: `https://sochain.com/api/v2/send_tx/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`,
+        url: `https://chain.so/api/v3/broadcast_transaction/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`,
         data: {
-          tx_hex: rawTransaction,
+          tx_hex: TransactionHex,
         },
+        headers: headers,
       });
-      return { transactionDetails: result && result.data && result.data.data ? result.data.data.txid : result }
+      return { transactionDetails: result && result.data && result.data.data ? result.data.data.hash : result }
     } catch (err) {
       throw err
     }
@@ -123,8 +126,9 @@ class KeyringController {
   async getFee(address, satPerByte) {
     const { networkType } = this.store.getState()
     try {
-      const URL = `https://sochain.com/api/v2/get_tx_unspent/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
-      const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL, satPerByte)
+      const URL = `https://sochain.com/api/v3/unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
+      const headers = { "API-KEY": SOCHAIN_API_KEY}
+      const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL, satPerByte, headers)
       return { transactionFees: fee }
     } catch (err) {
       throw err
@@ -147,9 +151,14 @@ class KeyringController {
 
 const getBalance = async (address, networkType) => {
   try {
-    const URL = `https://sochain.com/api/v2/get_address_balance/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
-    const balance = await axios.get(URL)
-    return { balance: balance.data.data.confirmed_balance }
+    const URL = `https://sochain.com/api/v3/balance/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
+    const headers = { "API-KEY": SOCHAIN_API_KEY}
+    const balance = await axios({
+      url : `${URL}`,
+      method: 'GET',
+      headers: headers
+  });
+    return { balance: balance.data.data.confirmed }
   } catch (err) {
     throw err
   }
