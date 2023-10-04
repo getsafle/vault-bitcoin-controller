@@ -74,35 +74,55 @@ class KeyringController {
    * @param {object: NATIVE_TRANSFER } transaction 
    * @returns 
    */
-  async signTransaction(transaction) {
+  async signTransaction(transaction, _privateKey = null) {
     const { wallet, network, address, networkType } = this.store.getState()
     const { from, to, amount, satPerByte } = transaction
-    const idx = address.indexOf(from)
-    if (idx < 0)
-      throw "Invalid address, the address is not available in the wallet"
+    let privateKey = _privateKey
+    if (!privateKey) {
+      const idx = address.indexOf(from)
+      if (idx < 0)
+        throw "Invalid address, the address is not available in the wallet"
+      
+      let res = helpers.utils.generateAddress(wallet, network, idx)
+      privateKey = res.privkey
+    }
+    
     const URL = `https://sochain.com/api/v3/unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
     const headers = { "API-KEY": SOCHAIN_API_KEY}
-    const { privkey } = helpers.utils.generateAddress(wallet, network, idx)
+    
     try {
-      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privkey, satPerByte, headers)
+      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privateKey, satPerByte, headers)
       return { signedTransaction };
     } catch (err) {
       throw err
     }
   }
 
-  async signMessage(message, _address) {
+  async signMessage(message, _address, privateKey = null) {
     const { wallet, network, address } = this.store.getState()
-    const idx = address.indexOf(_address);
-    if (idx < 0)
-      throw "Invalid address, the address is not available in the wallet"
-    try {
-      const { wallet: _wallet } = helpers.utils.generateAddress(wallet, network, idx)
-      var signature = bitcoinMessage.sign(message, _wallet.privateKey, _wallet.compressed, { segwitType: 'p2wpkh', extraEntropy: randomBytes(32) })
-      return { signedMessage: signature.toString('base64') };
-    } catch (err) {
-      throw err
+    
+    
+
+    if (!privateKey) {
+      const idx = address.indexOf(_address);
+      if (idx < 0)
+        throw "Invalid address, the address is not available in the wallet"
+      
+      try {
+        const { wallet: _wallet } = helpers.utils.generateAddress(wallet, network, idx)
+        var signature = bitcoinMessage.sign(message, _wallet.privateKey, _wallet.compressed, { segwitType: 'p2wpkh', extraEntropy: randomBytes(32) })
+        return { signedMessage: signature.toString('base64') };
+      } catch (err) {
+        throw err
+      }
+    
     }
+    else {
+      const ec_pair = bitcoinjs.ECPair.fromWIF(privateKey)
+      var signature = bitcoinMessage.sign(message, ec_pair.privateKey, ec_pair.compressed, { segwitType: 'p2wpkh', extraEntropy: randomBytes(32) })
+      return { signedMessage: signature.toString('base64') };
+    }
+    
   }
 
   async sendTransaction(TransactionHex) {

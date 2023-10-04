@@ -44,3 +44,7 @@
 
 #####  Sochain api update for UTXO calculation
 #####  Derivation path update for the P2WPKH standard addresses
+
+### 2.0.1 (2023-10-04)
+
+#####  Enabled message and transaction signing for imported accounts
