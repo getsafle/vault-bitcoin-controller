@@ -155,6 +155,20 @@ class KeyringController {
     }
   }
 
+  async getSatPerByte() {
+    const { networkType } = this.store.getState()
+    try {
+      const URL = `https://api.blockcypher.com/v1/btc/${networkType === TESTNET.NETWORK ? 'test3' : "main"}/`
+      const response = await axios({
+        url : `${URL}`,
+        method: 'GET',
+      });
+      return {low: parseInt(response.data.low_fee_per_kb/1000), medium: parseInt(response.data.medium_fee_per_kb/1000), high: parseInt(response.data.high_fee_per_kb/1000)}
+    } catch (err) {
+      throw err
+    }
+  }
+
   persistAllAddress(_address) {
     const { address } = this.store.getState()
     const newAdd = address

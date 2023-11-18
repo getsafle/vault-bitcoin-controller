@@ -48,3 +48,9 @@
 ### 2.0.1 (2023-10-04)
 
 #####  Enabled message and transaction signing for imported accounts
+
+### 2.0.2 (2023-11-18)
+
+##### Implement get satoshi per byte functionality
+
+- Added getSatPerByte() to fetch the satoshi per byte rate
