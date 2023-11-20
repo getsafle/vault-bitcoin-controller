@@ -1,13 +1,13 @@
 const { bitcoin: { HD_PATH } } = require("../../config/index")
 
-function calcBip32ExtendedKey(bip32RootKey) {
+function calcBip32ExtendedKey(bip32RootKey, hdPath) {
     // Check there's a root key to derive from
     if (!bip32RootKey) {
         return bip32RootKey;
     }
     var extendedKey = bip32RootKey;
     // Derive the key from the path constant
-    var pathBits = HD_PATH.split("/");
+    var pathBits = hdPath.split("/");
     for (var i = 0; i < pathBits.length; i++) {
         var bit = pathBits[i];
         var index = parseInt(bit);

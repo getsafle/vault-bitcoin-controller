@@ -54,3 +54,4 @@
 ##### Implement get satoshi per byte functionality
 
 - Added getSatPerByte() to fetch the satoshi per byte rate
+- Added HD PATH for testnet

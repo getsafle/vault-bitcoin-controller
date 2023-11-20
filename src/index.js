@@ -8,7 +8,7 @@ const axios = require("axios");
 
 const helpers = require('./helper/index')
 
-const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }, SOCHAIN_API_KEY } = require('./config/index')
+const { bitcoin: { HD_PATH_MAINNET, HD_PATH_TESTNET }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }, SOCHAIN_API_KEY } = require('./config/index')
 
 class KeyringController {
 
@@ -18,16 +18,16 @@ class KeyringController {
    * network = TESTNET | MAINNET 
    */
   constructor(opts) {
-    this.store = new ObservableStore({ mnemonic: opts.mnemonic, hdPath: HD_PATH, network: helpers.utils.getNetwork(opts.network), networkType: opts.network ? opts.network : MAINNET.NETWORK, wallet: null, address: [] })
+    this.store = new ObservableStore({ mnemonic: opts.mnemonic, hdPath: opts.network === TESTNET.NETWORK ? HD_PATH_TESTNET : HD_PATH_MAINNET, network: helpers.utils.getNetwork(opts.network), networkType: opts.network ? opts.network : MAINNET.NETWORK, wallet: null, address: [] })
     this.generateWallet()
     this.importedWallets = []
   }
 
   generateWallet() {
-    const { mnemonic, network } = this.store.getState();
+    const { mnemonic, network, hdPath } = this.store.getState();
     const seed = bip39.mnemonicToSeed(mnemonic)
     const bip32RootKey = bitcoinjs.bip32.fromSeed(seed, network);
-    const extendedKeys = helpers.utils.calcBip32ExtendedKeys(bip32RootKey)
+    const extendedKeys = helpers.utils.calcBip32ExtendedKeys(bip32RootKey, hdPath)
     this.updatePersistentStore({ wallet: extendedKeys })
     return extendedKeys
   }

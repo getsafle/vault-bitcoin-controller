@@ -10,7 +10,6 @@ async function getFeeAndInput(URL, satPerByte, headers) {
     
     const utxos = await axios({
         url : `${URL}`,
-        // url: 'https://sochain.com/api/v3/unspent_outputs/BTC/bc1q7cyrfmck2ffu2ud3rn5l5a8yv6f0chkp0zpemf',
         method: 'GET',
         headers: headers
     });

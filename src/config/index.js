@@ -1,6 +1,7 @@
 module.exports = {
     bitcoin: {
-        HD_PATH: `m/84'/0'/0'/0`,
+        HD_PATH_MAINNET: `m/84'/0'/0'/0`,
+        HD_PATH_TESTNET: `m/84'/1'/0'/0`
     },
     bitcoin_transaction: {
         NATIVE_TRANSFER: "NATIVE_TRANSFER"
