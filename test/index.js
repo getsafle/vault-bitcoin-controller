@@ -72,6 +72,7 @@ describe('Initialize wallet ', () => {
     it("Get fees will return NaN", async () => {
         const acc = await bitcoinWallet.getAccounts()
         const result = await bitcoinWallet.getFee(acc[0]);
+        console.log("result =", result);
         assert.equal(result.transactionFees, NaN, "Should be NaN")
     })
 
