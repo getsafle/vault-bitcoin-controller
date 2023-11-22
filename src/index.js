@@ -8,7 +8,8 @@ const axios = require("axios");
 
 const helpers = require('./helper/index')
 
-const { bitcoin: { HD_PATH_MAINNET, HD_PATH_TESTNET }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }, SOCHAIN_API_KEY } = require('./config/index')
+const { bitcoin: { HD_PATH_MAINNET, HD_PATH_TESTNET }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }} = require('./config/index')
+const { SOCHAIN_API_KEY, SOCHAIN_BASE_URL, BLOCKCYPHER_BASE_URL } = require('./constants/index')
 
 class KeyringController {
 
@@ -87,7 +88,7 @@ class KeyringController {
       privateKey = res.privkey
     }
     
-    const URL = `https://sochain.com/api/v3/unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
+    const URL = SOCHAIN_BASE_URL + `unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
     const headers = { "API-KEY": SOCHAIN_API_KEY}
     
     try {
@@ -131,7 +132,7 @@ class KeyringController {
       const headers = { "API-KEY": SOCHAIN_API_KEY}
       const result = await axios({
         method: "POST",
-        url: `https://chain.so/api/v3/broadcast_transaction/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`,
+        url: SOCHAIN_BASE_URL + `broadcast_transaction/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`,
         data: {
           tx_hex: TransactionHex,
         },
@@ -146,7 +147,7 @@ class KeyringController {
   async getFee(address, satPerByte) {
     const { networkType } = this.store.getState()
     try {
-      const URL = `https://sochain.com/api/v3/unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
+      const URL = SOCHAIN_BASE_URL + `unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
       const headers = { "API-KEY": SOCHAIN_API_KEY}
       const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL, satPerByte, headers)
       return { transactionFees: fee }
@@ -158,7 +159,7 @@ class KeyringController {
   async getSatPerByte() {
     const { networkType } = this.store.getState()
     try {
-      const URL = `https://api.blockcypher.com/v1/btc/${networkType === TESTNET.NETWORK ? 'test3' : "main"}/`
+      const URL = BLOCKCYPHER_BASE_URL + `${networkType === TESTNET.NETWORK ? 'test3' : "main"}/`
       const response = await axios({
         url : `${URL}`,
         method: 'GET',
@@ -185,7 +186,7 @@ class KeyringController {
 
 const getBalance = async (address, networkType) => {
   try {
-    const URL = `https://sochain.com/api/v3/balance/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
+    const URL = SOCHAIN_BASE_URL + `balance/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
     const headers = { "API-KEY": SOCHAIN_API_KEY}
     const balance = await axios({
       url : `${URL}`,

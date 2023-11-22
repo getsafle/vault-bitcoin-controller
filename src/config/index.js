@@ -15,7 +15,5 @@ module.exports = {
             NETWORK: "TESTNET",
             ADDRESS: 0x6f
         }
-    },
-    SATOSHI: 100000000,
-    SOCHAIN_API_KEY: 'F7RKphrzItSQV-MUoPY_S0XIuwTzxFpt'
+    }
 }

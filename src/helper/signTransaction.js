@@ -1,5 +1,5 @@
 const bitcore = require("bitcore-lib")
-const { SATOSHI, DEFAULT_SATOSHI_PER_BYTE } = require("../config/index")
+const { SATOSHI } = require("../constants/index")
 
 const getFeeAndInput = require('./calculateFeeAndInput')
 

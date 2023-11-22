@@ -1,8 +1,9 @@
 module.exports = {
 
     HD_WALLET_12_MNEMONIC : 'uphold job voyage bunker attract similar ship pear soda security rubber offer',
-    EXTERNAL_ACCOUNT_PRIVATE_KEY_MAINNET: "KyWPu9amSuhWkpJgJAxSuKnGCUvxH7HbrssNNCozGYnVkixUYVya", // works on MAINNET ONLY
-    EXTERNAL_ACCOUNT_ADDRESS_MAINNET: "bc1qqxwynt4p8crlk5ck6sqzsdg9wg8c9qt7upf89t",
+    TEST_ADDRESS_1: 'tb1qw3rs6lte05ej6rzm86sd4rg6vt9ss27shx5z8q',
+    TEST_ADDRESS_2: 'tb1qt3vyrqgy7emqcr8sjr39zcjdca7grfer7lvxhp',
+    
     EXTERNAL_ACCOUNT_PRIVATE_KEY: "cQanwmov5nfBHrdqoAAV42i3Xgw8cyebAmKBLRcKXvQH5eutSQzo",  // works on TESTNET ONLY
     EXTERNAL_ACCOUNT_ADDRESS: "tb1qcen5y7uvp3r9y0c4l4c55hlaks8gef54pr6v68",
     
@@ -17,7 +18,7 @@ module.exports = {
 
     TRANSFER_BTC: {
         BTC_RECEIVER: 'tb1qt3vyrqgy7emqcr8sjr39zcjdca7grfer7lvxhp', // address at test index 1
-        BTC_AMOUNT: 0.000001
+        BTC_AMOUNT: 0.00001
     },
     BITCOIN_NETWORK: {
         MAINNET: 'MAINNET',

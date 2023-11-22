@@ -55,3 +55,5 @@
 
 - Added getSatPerByte() to fetch the satoshi per byte rate
 - Added HD PATH for testnet
+- Updated tests to add assertions
+- Added constants for base URLs

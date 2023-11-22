@@ -1,6 +1,5 @@
 const axios = require('axios')
 var sb = require("satoshi-bitcoin");
-const { SATOSHI } = require("../config/index")
 
 async function getFeeAndInput(URL, satPerByte, headers) {
 
