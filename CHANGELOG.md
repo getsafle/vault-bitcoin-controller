@@ -57,3 +57,4 @@
 - Added HD PATH for testnet
 - Updated tests to add assertions
 - Added constants for base URLs
+- Updated node version in CI
