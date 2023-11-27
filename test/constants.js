@@ -18,7 +18,7 @@ module.exports = {
 
     TRANSFER_BTC: {
         BTC_RECEIVER: 'tb1qt3vyrqgy7emqcr8sjr39zcjdca7grfer7lvxhp', // address at test index 1
-        BTC_AMOUNT: 0.00001
+        BTC_AMOUNT: 1000
     },
     BITCOIN_NETWORK: {
         MAINNET: 'MAINNET',

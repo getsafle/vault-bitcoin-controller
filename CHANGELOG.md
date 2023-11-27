@@ -58,3 +58,4 @@
 - Updated tests to add assertions
 - Added constants for base URLs
 - Updated node version in CI
+- Updated raw transaction paramaters, amount to be accepted in satoshi
