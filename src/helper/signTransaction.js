@@ -1,6 +1,6 @@
 const bitcore = require("bitcore-lib")
 
-const getFeeAndInput = require('./calculateFeeAndInput')
+const {getFeeAndInput} = require('./calculateFeeAndInput')
 
 async function signTransaction(from, to, amountToSend, URL, privateKey, satPerByte, headers) {
 

@@ -144,27 +144,33 @@ class KeyringController {
     }
   }
 
-  async getFee(address, satPerByte) {
-    const { networkType } = this.store.getState()
-    try {
-      const URL = SOCHAIN_BASE_URL + `unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
-      const headers = { "API-KEY": SOCHAIN_API_KEY}
-      const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL, satPerByte, headers)
-      return { transactionFees: fee }
-    } catch (err) {
-      throw err
-    }
-  }
 
-  async getSatPerByte() {
+  async getFees(rawTransaction) {
     const { networkType } = this.store.getState()
+    const { from } = rawTransaction
     try {
       const URL = BLOCKCYPHER_BASE_URL + `${networkType === TESTNET.NETWORK ? 'test3' : "main"}/`
       const response = await axios({
         url : `${URL}`,
         method: 'GET',
       });
-      return {low: parseInt(response.data.low_fee_per_kb/1000), medium: parseInt(response.data.medium_fee_per_kb/1000), high: parseInt(response.data.high_fee_per_kb/1000)}
+
+      let fees = {
+        slow: parseInt(response.data.low_fee_per_kb/1000),
+        standard: parseInt(response.data.medium_fee_per_kb/1000),
+        fast: parseInt(response.data.high_fee_per_kb/1000)
+      }
+
+      // get transaction size
+      const sochainURL = SOCHAIN_BASE_URL + `unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
+      const headers = { "API-KEY": SOCHAIN_API_KEY}
+
+      let {transactionSize} = helpers.getTransactionSize(sochainURL, headers)
+
+      return {
+        transactionSize,
+        fees
+      }
     } catch (err) {
       throw err
     }

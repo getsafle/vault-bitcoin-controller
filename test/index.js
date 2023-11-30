@@ -69,23 +69,38 @@ describe('Initialize wallet ', () => {
         assert(bitcoinMessage.verify(TESTING_MESSAGE_3, acc[0], signedMessage3.signedMessage), "Should verify message 3")
     })
 
-    it("Get fees will return NaN", async () => {
-        const acc = await bitcoinWallet.getAccounts()
-        const result = await bitcoinWallet.getFee(acc[0]);
-        assert.equal(result.transactionFees, NaN, "Should be NaN")
+    it("Get fees, invalid argument", async () => {
+        try {
+            const acc = await bitcoinWallet.getAccounts()
+            const result = await bitcoinWallet.getFees(acc[0]);
+        } catch (err) {
+            assert.equal(err, "Cannot destructure property 'from' of 'transaction' as it is undefined.", "Should throw TyprError")
+        }
+        
     })
 
-    it("Get satPerByte", async () => {
-        let satPerByte = await bitcoinWallet.getSatPerByte()
-        satPerByte = Object.keys(satPerByte);
-        let expected = [ 'low', 'medium', 'high' ]
-        assert.deepEqual(satPerByte, expected, "Should have low, med, high fees")
+    it("Get fees, valid argument", async () => {
+        const acc = await bitcoinWallet.getAccounts()
+        BTC_TXN_PARAM['from'] = acc[0]
+        
+        const response = await bitcoinWallet.getFees(BTC_TXN_PARAM)
+        let actualResponse = Object.keys(response)
+        let expectedResponse = ['transactionSize', 'fees']
+        assert.deepEqual(actualResponse, expectedResponse, "Should have transactionSize and fees")
+
+        let satPerByte = Object.keys(response.fees);
+        let expected = [ 'slow', 'standard', 'fast' ]
+        assert.deepEqual(satPerByte, expected, "Should have slow, standard, fast fees")
     })
 
-    it("Get fees with custom satPerByte", async () => {
+    it("Sign Transaction using estimated fee", async () => {
         const acc = await bitcoinWallet.getAccounts()
-        const fee = await bitcoinWallet.getFee(acc[0], 50);
-        assert(fee.transactionFees)
+        BTC_TXN_PARAM['from'] = acc[0]
+
+        let response = await bitcoinWallet.getFees(BTC_TXN_PARAM)
+        BTC_TXN_PARAM['satPerByte'] = response.fees.slow
+        const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
+        assert(signedTransaction)
     })
 
     it("Sign Transaction should fail and throw error", async () => {

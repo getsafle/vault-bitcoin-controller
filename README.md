@@ -55,7 +55,7 @@ const signedMsg = await bitcoinController.signMessage(msgString, address);
 ### Get fees
 
 ```
-const fees = await bitcoinController.getFee(address, satPerByte);
+const fees = await bitcoinController.getFees(rawTransaction);
 ```
 
 ### Get balance
