@@ -1,4 +1,9 @@
-# bitcoin-controller
+# bitcoin-controller<code><a href="https://www.docker.com/" target="_blank"><img height="50" src="https://bitcoin.org/img/icons/logotop.svg?1700824099"></a></code>
+
+[![npm version](https://badge.fury.io/js/@getsafle%2Fvault-bitcoin-controller.svg)](https://badge.fury.io/js/@getsafle%2Fvault-bitcoin-controller) <img alt="Static Badge" src="https://img.shields.io/badge/License-MIT-green">   [![Discussions][discussions-badge]][discussions-link]
+ <img alt="Static Badge" src="https://img.shields.io/badge/bitcoin_controller-documentation-purple"> 
+
+
 
 ## Install
 
@@ -63,3 +68,6 @@ const fees = await bitcoinController.getFees(rawTransaction);
 ```
 const balance = await getBalance(address, network); // if network !== TESTNET then it will fetch mainnet balance
 ```
+
+[discussions-badge]: https://img.shields.io/badge/Code_Quality-passing-rgba
+[discussions-link]: https://github.com/getsafle/vault-bitcoin-controller/actions
