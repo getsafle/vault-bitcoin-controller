@@ -53,9 +53,10 @@
 
 ##### Implement get satoshi per byte functionality
 
-- Added getSatPerByte() to fetch the satoshi per byte rate
+- Standardize getFees() to provide transaction fee in sathoshi and transaction size
 - Added HD PATH for testnet
 - Updated tests to add assertions
 - Added constants for base URLs
 - Updated node version in CI
 - Updated raw transaction paramaters, amount to be accepted in satoshi
+- Added badges
