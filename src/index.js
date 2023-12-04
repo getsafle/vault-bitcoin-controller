@@ -171,7 +171,7 @@ class KeyringController {
       const sochainURL = SOCHAIN_BASE_URL + `unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
       const headers = { "API-KEY": SOCHAIN_API_KEY}
 
-      let {transactionSize} = helpers.getTransactionSize(sochainURL, headers)
+      let { transactionSize } = await helpers.getTransactionSize(sochainURL, headers)
 
       return {
         transactionSize,

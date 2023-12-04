@@ -74,7 +74,7 @@ describe('Initialize wallet ', () => {
             const acc = await bitcoinWallet.getAccounts()
             const result = await bitcoinWallet.getFees(acc[0]);
         } catch (err) {
-            assert.equal(err, "Cannot destructure property 'from' of 'transaction' as it is undefined.", "Should throw TyprError")
+            assert.equal(err.message, "Request failed with status code 404", "Should throw 404 error")
         }
         
     })
