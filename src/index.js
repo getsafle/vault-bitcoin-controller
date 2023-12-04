@@ -8,7 +8,8 @@ const axios = require("axios");
 
 const helpers = require('./helper/index')
 
-const { bitcoin: { HD_PATH }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }, SOCHAIN_API_KEY } = require('./config/index')
+const { bitcoin: { HD_PATH_MAINNET, HD_PATH_TESTNET }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }} = require('./config/index')
+const { SOCHAIN_API_KEY, SOCHAIN_BASE_URL, BLOCKCYPHER_BASE_URL } = require('./constants/index')
 
 class KeyringController {
 
@@ -18,16 +19,16 @@ class KeyringController {
    * network = TESTNET | MAINNET 
    */
   constructor(opts) {
-    this.store = new ObservableStore({ mnemonic: opts.mnemonic, hdPath: HD_PATH, network: helpers.utils.getNetwork(opts.network), networkType: opts.network ? opts.network : MAINNET.NETWORK, wallet: null, address: [] })
+    this.store = new ObservableStore({ mnemonic: opts.mnemonic, hdPath: opts.network === TESTNET.NETWORK ? HD_PATH_TESTNET : HD_PATH_MAINNET, network: helpers.utils.getNetwork(opts.network), networkType: opts.network ? opts.network : MAINNET.NETWORK, wallet: null, address: [] })
     this.generateWallet()
     this.importedWallets = []
   }
 
   generateWallet() {
-    const { mnemonic, network } = this.store.getState();
+    const { mnemonic, network, hdPath } = this.store.getState();
     const seed = bip39.mnemonicToSeed(mnemonic)
     const bip32RootKey = bitcoinjs.bip32.fromSeed(seed, network);
-    const extendedKeys = helpers.utils.calcBip32ExtendedKeys(bip32RootKey)
+    const extendedKeys = helpers.utils.calcBip32ExtendedKeys(bip32RootKey, hdPath)
     this.updatePersistentStore({ wallet: extendedKeys })
     return extendedKeys
   }
@@ -87,7 +88,7 @@ class KeyringController {
       privateKey = res.privkey
     }
     
-    const URL = `https://sochain.com/api/v3/unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
+    const URL = SOCHAIN_BASE_URL + `unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
     const headers = { "API-KEY": SOCHAIN_API_KEY}
     
     try {
@@ -131,7 +132,7 @@ class KeyringController {
       const headers = { "API-KEY": SOCHAIN_API_KEY}
       const result = await axios({
         method: "POST",
-        url: `https://chain.so/api/v3/broadcast_transaction/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`,
+        url: SOCHAIN_BASE_URL + `broadcast_transaction/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`,
         data: {
           tx_hex: TransactionHex,
         },
@@ -143,13 +144,39 @@ class KeyringController {
     }
   }
 
-  async getFee(address, satPerByte) {
+
+  async getFees(rawTransaction) {
     const { networkType } = this.store.getState()
+    const { from } = rawTransaction
     try {
-      const URL = `https://sochain.com/api/v3/unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
+      const URL = BLOCKCYPHER_BASE_URL + `${networkType === TESTNET.NETWORK ? 'test3' : "main"}/`
+      const response = await axios({
+        url : `${URL}`,
+        method: 'GET',
+      });
+
+      let fees = {
+        slow: {
+          satPerByte: parseInt(response.data.low_fee_per_kb/1000),
+        },
+        standard: {
+          satPerByte: parseInt(response.data.medium_fee_per_kb/1000),
+        },
+        fast: {
+          satPerByte: parseInt(response.data.high_fee_per_kb/1000)
+        }
+      }
+
+      // get transaction size
+      const sochainURL = SOCHAIN_BASE_URL + `unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
       const headers = { "API-KEY": SOCHAIN_API_KEY}
-      const { totalAmountAvailable, inputs, fee } = await helpers.getFeeAndInput(URL, satPerByte, headers)
-      return { transactionFees: fee }
+
+      let {transactionSize} = helpers.getTransactionSize(sochainURL, headers)
+
+      return {
+        transactionSize,
+        fees
+      }
     } catch (err) {
       throw err
     }
@@ -171,7 +198,7 @@ class KeyringController {
 
 const getBalance = async (address, networkType) => {
   try {
-    const URL = `https://sochain.com/api/v3/balance/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
+    const URL = SOCHAIN_BASE_URL + `balance/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${address}`
     const headers = { "API-KEY": SOCHAIN_API_KEY}
     const balance = await axios({
       url : `${URL}`,
