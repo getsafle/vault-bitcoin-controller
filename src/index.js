@@ -156,9 +156,15 @@ class KeyringController {
       });
 
       let fees = {
-        slow: parseInt(response.data.low_fee_per_kb/1000),
-        standard: parseInt(response.data.medium_fee_per_kb/1000),
-        fast: parseInt(response.data.high_fee_per_kb/1000)
+        slow: {
+          satPerByte: parseInt(response.data.low_fee_per_kb/1000),
+        },
+        standard: {
+          satPerByte: parseInt(response.data.medium_fee_per_kb/1000),
+        },
+        fast: {
+          satPerByte: parseInt(response.data.high_fee_per_kb/1000)
+        }
       }
 
       // get transaction size
