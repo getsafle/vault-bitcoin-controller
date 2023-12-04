@@ -60,3 +60,4 @@
 - Updated node version in CI
 - Updated raw transaction paramaters, amount to be accepted in satoshi
 - Added badges
+- Updated license in package json
