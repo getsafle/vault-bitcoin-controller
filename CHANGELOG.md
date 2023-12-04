@@ -66,4 +66,4 @@
 
 ##### GetFees() update
 
-- Added await for the async call to get transactionSize
+- Added await for the async call to get transactionSize and updated tests
