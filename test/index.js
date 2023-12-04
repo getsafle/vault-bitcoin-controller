@@ -98,7 +98,7 @@ describe('Initialize wallet ', () => {
         BTC_TXN_PARAM['from'] = acc[0]
 
         let response = await bitcoinWallet.getFees(BTC_TXN_PARAM)
-        BTC_TXN_PARAM['satPerByte'] = response.fees.slow
+        BTC_TXN_PARAM['satPerByte'] = response.fees.slow.satPerByte
         const { signedTransaction } = await bitcoinWallet.signTransaction(BTC_TXN_PARAM);
         assert(signedTransaction)
     })
