@@ -61,3 +61,9 @@
 - Updated raw transaction paramaters, amount to be accepted in satoshi
 - Added badges
 - Updated license in package json
+
+### 2.0.3 (2023-12-04)
+
+##### GetFees() update
+
+- Added await for the async call to get transactionSize
