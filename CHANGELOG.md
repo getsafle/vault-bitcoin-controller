@@ -67,3 +67,7 @@
 ##### GetFees() update
 
 - Added await for the async call to get transactionSize and updated tests
+
+### 2.0.4 (2024-01-09)
+
+- Updated Sochain api key
