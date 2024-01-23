@@ -17,12 +17,11 @@ async function getTransactionSize(URL, headers){
     let inputs = [];
     utxos.data.data.outputs.forEach(async (element) => {
         let utxo = {};
-        utxo.satoshis = sb.toSatoshi(parseFloat(element.value));
-        utxo.script = element.script;
-        utxo.address = element.address;
-        utxo.txId = element.hash;
-        utxo.outputIndex = element.index;
-        totalAmountAvailable += utxo.satoshis;
+        utxo.value = sb.toSatoshi(parseFloat(element.value));
+        utxo.scriptPubKey = element.script;
+        utxo.txid = element.hash;
+        utxo.vout = element.index;
+        totalAmountAvailable += utxo.value;
         inputCount += 1;
         inputs.push(utxo);
     });
