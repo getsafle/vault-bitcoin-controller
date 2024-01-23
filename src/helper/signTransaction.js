@@ -1,10 +1,10 @@
-const bitcore = require("bitcore-lib")
+const bitcoin = require("bitcoinjs-lib")
 
 const {getFeeAndInput} = require('./calculateFeeAndInput')
 
-async function signTransaction(from, to, amountToSend, URL, privateKey, satPerByte, headers) {
-
-    const transaction = new bitcore.Transaction();
+async function signTransaction(from, to, amountToSend, URL, privateKey, satPerByte, headers, network) {
+    
+    const psbt = new bitcoin.Psbt({ network: network }) 
 
     const { totalAmountAvailable, inputs, fee } = await getFeeAndInput(URL, satPerByte, headers)
 
@@ -12,26 +12,39 @@ async function signTransaction(from, to, amountToSend, URL, privateKey, satPerBy
         throw new Error("Balance is too low for this transaction");
     }
 
-    //Set transaction input
-    transaction.from(inputs);
+    for (const unspentOutput of inputs) {
+        psbt.addInput({
+            hash: unspentOutput.txid,
+            index: unspentOutput.vout,
+            witnessUtxo: {
+                script: Buffer.from(unspentOutput.scriptPubKey, 'hex'),
+                value: unspentOutput.value // value in satoshi
+            },
+        })
+    }
 
-    // set the recieving address and the amount to send
-    transaction.to(to, Math.floor(amountToSend));
+    psbt.addOutput({address: to, value: amountToSend});
 
-    // Set change address - Address to receive the left over funds after transfer
-    transaction.change(from);
+    const change = totalAmountAvailable - amountToSend - fee
+    psbt.addOutput({address: from, value: change});
+    
+    for (let i = 0; i < inputs.length; i++) {
+        psbt.signInput(i, bitcoin.ECPair.fromWIF(privateKey, bitcoin.networks.testnet))
+    }
 
-    //manually set transaction fees: 20 satoshis per byte
-    transaction.fee(fee);
+    const isValid = psbt.validateSignaturesOfAllInputs()
 
-    // Sign transaction with your private key
-    transaction.sign(privateKey);
+    if (isValid) {
+        psbt.finalizeAllInputs()
+        // signed transaction hex
+        const transaction = psbt.extractTransaction()
+        const signedTransaction = transaction.toHex()
+        const transactionId = transaction.getId()
 
-    // serialize Transactions
-    const serializedTransaction = transaction.serialize();
-
-    return serializedTransaction;
-
+        return signedTransaction
+    }
+    
 }
+
 
 module.exports = signTransaction

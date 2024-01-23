@@ -71,3 +71,8 @@
 ### 2.0.4 (2024-01-09)
 
 - Updated Sochain api key
+
+### 2.0.5 (2024-01-23)
+
+- Replaced blockcyper api with sochain api to fetch fees in satoshi
+- Updated sign transaction to use bitcoinjs-lib

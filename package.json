@@ -1,6 +1,6 @@
 {
   "name": "@getsafle/vault-bitcoin-controller",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "",
   "engines": {
     "node": ">= 10"
