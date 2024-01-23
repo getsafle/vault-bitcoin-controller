@@ -9,7 +9,7 @@ const axios = require("axios");
 const helpers = require('./helper/index')
 
 const { bitcoin: { HD_PATH_MAINNET, HD_PATH_TESTNET }, bitcoin_transaction: { NATIVE_TRANSFER }, bitcoin_network: { MAINNET, TESTNET }} = require('./config/index')
-const { SOCHAIN_API_KEY, SOCHAIN_BASE_URL, BLOCKCYPHER_BASE_URL } = require('./constants/index')
+const { SOCHAIN_API_KEY, SOCHAIN_BASE_URL } = require('./constants/index')
 
 class KeyringController {
 
@@ -148,28 +148,33 @@ class KeyringController {
   async getFees(rawTransaction) {
     const { networkType } = this.store.getState()
     const { from } = rawTransaction
+
     try {
-      const URL = BLOCKCYPHER_BASE_URL + `${networkType === TESTNET.NETWORK ? 'test3' : "main"}/`
+      const headers = { "API-KEY": SOCHAIN_API_KEY}
+
+      const URL = SOCHAIN_BASE_URL + "network_info/" + `${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}`
       const response = await axios({
         url : `${URL}`,
         method: 'GET',
+        headers: headers,
       });
+
+      let blocks = response.data.data['mempool'].blocks.slice(0,3)
 
       let fees = {
         slow: {
-          satPerByte: parseInt(response.data.low_fee_per_kb/1000),
+          satPerByte: parseInt(blocks[2].median_fee_rate),
         },
         standard: {
-          satPerByte: parseInt(response.data.medium_fee_per_kb/1000),
+          satPerByte: parseInt(blocks[1].median_fee_rate),
         },
         fast: {
-          satPerByte: parseInt(response.data.high_fee_per_kb/1000)
+          satPerByte: parseInt(blocks[0].median_fee_rate)
         }
       }
 
       // get transaction size
       const sochainURL = SOCHAIN_BASE_URL + `unspent_outputs/${networkType === TESTNET.NETWORK ? 'BTCTEST' : "BTC"}/${from}`
-      const headers = { "API-KEY": SOCHAIN_API_KEY}
 
       let { transactionSize } = await helpers.getTransactionSize(sochainURL, headers)
 
