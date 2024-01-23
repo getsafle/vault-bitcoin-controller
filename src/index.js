@@ -92,7 +92,7 @@ class KeyringController {
     const headers = { "API-KEY": SOCHAIN_API_KEY}
     
     try {
-      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privateKey, satPerByte, headers)
+      const signedTransaction = await helpers.signTransaction(from, to, amount, URL, privateKey, satPerByte, headers, network)
       return { signedTransaction };
     } catch (err) {
       throw err
