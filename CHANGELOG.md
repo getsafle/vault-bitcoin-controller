@@ -76,3 +76,7 @@
 
 - Replaced blockcyper api with sochain api to fetch fees in satoshi
 - Updated sign transaction to use bitcoinjs-lib
+
+### 2.0.6 (2024-01-23)
+
+- Added proxy URL to prevent CORS issue

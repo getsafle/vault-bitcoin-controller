@@ -1,15 +1,24 @@
 const axios = require('axios')
 var sb = require("satoshi-bitcoin");
+const { PROD_PROXY_BASE_URL} = require("../constants/index.js");
 
 async function getTransactionSize(URL, headers){
     
     let inputCount = 0;
     let outputCount = 2;
 
+    let data = {
+        "url": URL,
+        "headers": headers
+    }
+
     const utxos = await axios({
-        url : `${URL}`,
-        method: 'GET',
-        headers: headers
+        url : `${PROD_PROXY_BASE_URL}` + '/get',
+        method: "POST",
+        data: JSON.stringify(data),
+        headers: { 
+            'Content-Type': 'application/json'
+        },    
     });
     
     let totalAmountAvailable = 0;
