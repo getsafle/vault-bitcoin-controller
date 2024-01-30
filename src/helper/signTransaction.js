@@ -29,7 +29,7 @@ async function signTransaction(from, to, amountToSend, URL, privateKey, satPerBy
     psbt.addOutput({address: from, value: change});
     
     for (let i = 0; i < inputs.length; i++) {
-        psbt.signInput(i, bitcoin.ECPair.fromWIF(privateKey, bitcoin.networks.testnet))
+        psbt.signInput(i, bitcoin.ECPair.fromWIF(privateKey, network))
     }
 
     const isValid = psbt.validateSignaturesOfAllInputs()
